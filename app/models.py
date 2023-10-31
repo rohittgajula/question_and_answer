@@ -32,3 +32,10 @@ class Answer(models.Model):
     def __str__(self):
         return str(self.answer)
     
+class Vote(models.Model):
+    answer = models.ForeignKey(Answer, on_delete=models.CASCADE, blank=False)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
+
+    def __str__(self):
+        return str(self.answer)
+    

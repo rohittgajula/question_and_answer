@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Question, Answer
+from .models import Question, Answer, Vote
 
 class AnswerSerializer(serializers.ModelSerializer):
 
@@ -20,4 +20,7 @@ class QuestionSerializer(serializers.ModelSerializer):
         serializer = AnswerSerializer(answers, many=True)
         return serializer.data
 
-
+class VoteSerailizer(serializers.ModelSerializer):
+    class Meta:
+        model = Vote
+        fields = '__all__'
