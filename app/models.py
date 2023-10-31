@@ -27,12 +27,20 @@ class Answer(models.Model):
     answer = models.CharField(max_length=1000, default="", blank=False)
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     createdAt = models.DateTimeField(auto_now_add=True)
-    votes = models.IntegerField(default=0)
+    upVotes = models.IntegerField(default=0)
+    downVotes = models.IntegerField(default=0)
 
     def __str__(self):
         return str(self.answer)
     
-class Vote(models.Model):
+class upVote(models.Model):
+    answer = models.ForeignKey(Answer, on_delete=models.CASCADE, blank=False)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
+
+    def __str__(self):
+        return str(self.answer)
+    
+class downVote(models.Model):
     answer = models.ForeignKey(Answer, on_delete=models.CASCADE, blank=False)
     author = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
 

@@ -1,11 +1,25 @@
 from rest_framework import serializers
-from .models import Question, Answer, Vote
+from .models import Question, Answer, upVote, downVote
 
 class AnswerSerializer(serializers.ModelSerializer):
 
+    votes = serializers.SerializerMethodField(method_name='get_votes', read_only=True)
     class Meta:
         model = Answer
-        fields = ('id', 'question', 'answer', 'votes', 'author', 'createdAt')
+        fields = ('id', 'question', 'answer', 'author', 'createdAt', 'votes')
+
+    def get_votes(self, obj):
+        total_votes = 0
+        if obj.upVotes is not None and obj.downVotes is not None:
+            total_votes = (obj.upVotes + obj.downVotes)
+            print(total_votes)
+            return total_votes
+        # elif obj.upVotes is None:
+        #     total_votes = obj.upVotes
+        # elif obj.downVotes is None:
+        #     total_votes = obj.downVotes
+
+            
 
 class QuestionSerializer(serializers.ModelSerializer):
 
@@ -20,7 +34,13 @@ class QuestionSerializer(serializers.ModelSerializer):
         serializer = AnswerSerializer(answers, many=True)
         return serializer.data
 
-class VoteSerailizer(serializers.ModelSerializer):
+class upVoteSerailizer(serializers.ModelSerializer):
     class Meta:
-        model = Vote
+        model = upVote
         fields = '__all__'
+
+class downVoteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = downVote
+        fields = '__all__'
+

@@ -6,8 +6,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 
-from .models import Question, Answer, Vote
-from .serializers import QuestionSerializer, AnswerSerializer, VoteSerailizer
+from .models import Question, Answer, upVote, downVote
+from .serializers import QuestionSerializer, AnswerSerializer, upVoteSerailizer
 from .filters import QuestionFilters
 
 @api_view(['GET'])
@@ -126,20 +126,41 @@ def delete_answer(request, pk):
 def upvote(request, pk):
     answer = get_object_or_404(Answer, id=pk)
     author=request.user
-    voter = Vote.objects.filter(author=author, answer=answer)        # answer_id=pk
+    voter = upVote.objects.filter(author=author, answer=answer)        # answer_id=pk
     if voter.exists():
         return Response({
             'details':'You cannot vote twice'
         })
     else:
-        Vote.objects.create(
+        upVote.objects.create(
             answer=answer,
             author=author
         )
-        answer.votes += 1
+        answer.upVotes += 1
         answer.save()
         return Response({
             'details':'Vote added'
         })
     
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def downvote(request, pk):
+    answer = get_object_or_404(Answer, id=pk)
+    author = request.user
+    voter = downVote.objects.filter(author=author, answer=answer)
+    if voter.exists():
+        return Response({
+            'error':'You cannot vote twice.'
+        })
+    else:
+        downVote.objects.create(
+            answer=answer,
+            author=author
+        )
+        answer.downVotes -= 1
+        answer.save()
+        return Response({
+            'details':'downvote added'
+        })
+
 
