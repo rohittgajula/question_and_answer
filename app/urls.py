@@ -11,7 +11,7 @@ urlpatterns = [
 
     # answers
     path('<str:pk>/answer/', views.create_answer, name='create_answer'),
-    path('<str:pk>/answer/delete/', views.delete_answer, name='delete_answer'), # questions review will be deleated. here pk is ID of question.
+    path('<str:pk>/answer/delete/', views.delete_answer, name='delete_answer'), # questions related answers will be deleated. here pk is ID of question.
 
     # votings
     path('answer/<str:pk>/upvote/', views.upvote, name='upvote'),
