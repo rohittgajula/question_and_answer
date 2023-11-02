@@ -43,8 +43,8 @@ def get_user(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def all_user(request):
-    author = User.objects.all()
-    serializer = UserSerializer(author, many=True)
+    queryset = User.objects.all().order_by('id')
+    serializer = UserSerializer(queryset, many=True)
     return Response({
         'Authors':serializer.data
     })
