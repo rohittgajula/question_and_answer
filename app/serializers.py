@@ -13,22 +13,13 @@ class AnswerSerializer(serializers.ModelSerializer):
         if obj.upVotes is not None and obj.downVotes is not None:
             total_votes = (obj.upVotes + obj.downVotes)
             print(total_votes)
-            return total_votes
-        # elif obj.upVotes is None:
-        #     total_votes = obj.upVotes
-        # elif obj.downVotes is None:
-        #     total_votes = obj.downVotes
-
-            
+            return total_votes       
 
 class QuestionSerializer(serializers.ModelSerializer):
-
     answer = serializers.SerializerMethodField(method_name='get_answers', read_only = True)
-
     class Meta:
         model = Question
         fields = ('id', 'author', 'question', 'answer', 'tag', 'createdAt')
-
     def get_answers(self, obj):
         answers = obj.answers.all()
         serializer = AnswerSerializer(answers, many=True)
