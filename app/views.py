@@ -10,6 +10,9 @@ from .models import Question, Answer, upVote, downVote
 from .serializers import QuestionSerializer, AnswerSerializer, upVoteSerailizer
 from .filters import QuestionFilters
 
+from drf_yasg.utils import swagger_auto_schema
+
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_questions(request):
@@ -20,6 +23,7 @@ def get_questions(request):
         'Questions':serializer.data
     }, status.HTTP_200_OK)
 
+@swagger_auto_schema(method='POST', request_body=QuestionSerializer)
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def new_question(request):
@@ -43,6 +47,7 @@ def single_question(request, pk):
         'question':serializer.data
     }, status.HTTP_200_OK)
 
+@swagger_auto_schema(method='PUT', request_body=QuestionSerializer)
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def update_question(request, pk):
@@ -77,6 +82,7 @@ def delete_question(request, pk):
         'details':'Sucessfully Deleated.'
     })
 
+@swagger_auto_schema(method='POST', request_body=QuestionSerializer)
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_answer(request, pk):
@@ -121,6 +127,7 @@ def delete_answer(request, pk):
         }, status.HTTP_404_NOT_FOUND)
 
     
+@swagger_auto_schema(method='POST', request_body=AnswerSerializer)
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def upvote(request, pk):
@@ -142,6 +149,7 @@ def upvote(request, pk):
             'details':'Vote added'
         })
     
+@swagger_auto_schema(method='POST', request_body=AnswerSerializer)
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def downvote(request, pk):
